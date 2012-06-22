@@ -138,6 +138,24 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         $mockObjects->setValue($this, array());
     }
 
+    public function testMockSameFunctionIsDifferentNamespaces()
+    {
+        $this->assertMockFunctionNotDefined('My\TestNamespace\foofunc');
+        $this->functionMocker
+            ->mockFunction('foofunc');
+        $this->assertMockFunctionNotDefined('My\TestNamespace\foofunc');
+        $this->functionMocker->getMock();
+        $this->assertMockFunctionDefined('My\TestNamespace\foofunc', 'My\TestNamespace');
+
+        $this->functionMocker = PHPUnit_Extension_FunctionMocker::start($this, 'My\TestNamespace2');
+        $this->assertFalse(function_exists('My\TestNamespace2\foofunc'));
+        $this->functionMocker
+            ->mockFunction('foofunc');
+        $this->assertFalse(function_exists('My\TestNamespace2\foofunc'));
+        $this->functionMocker->getMock();
+        $this->assertMockFunctionDefined('My\TestNamespace2\foofunc', 'My\TestNamespace2');
+    }
+
     public function assertMockFunctionNotDefined($function)
     {
         $this->assertFalse(

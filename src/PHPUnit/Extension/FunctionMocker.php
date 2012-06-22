@@ -61,15 +61,15 @@ class PHPUnit_Extension_FunctionMocker
         );
 
         foreach ($this->functions as $function) {
-
-            if (in_array($function, static::$mockedFunctions, true)) {
+            $fqFunction = $this->namespace . '\\' . $function;
+            if (in_array($fqFunction, static::$mockedFunctions, true)) {
                 continue;
             }
 
             $code = PHPUnit_Extension_FunctionMocker_CodeGenerator::generateCode($function, $this->namespace);
             eval($code);
 
-            static::$mockedFunctions[] = $function;
+            static::$mockedFunctions[] = $fqFunction;
         }
 
         if (!isset($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'])) {
