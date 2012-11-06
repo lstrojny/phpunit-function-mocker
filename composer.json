@@ -1,6 +1,6 @@
 {
     "name": "lstrojny/phpunit-function-mocker",
-    "description": "Mock functions with PHPUnit mock objects",
+    "description": "Allows mocking otherwise untestable PHP functions through the use of namespaces",
     "require-dev": {
         "phpunit/phpunit": "*"
     },
