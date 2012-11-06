@@ -2,6 +2,8 @@
 
 Allows mocking otherwise untestable PHP functions through the use of namespaces.
 
+[![Build Status](https://secure.travis-ci.org/lstrojny/phpunit-function-mocker.png)](http://travis-ci.org/lstrojny/phpunit-function-mocker)
+
 ```php
 <?php
 namespace MyNamespace;
