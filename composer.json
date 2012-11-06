@@ -1,6 +1,7 @@
 {
     "name": "lstrojny/phpunit-function-mocker",
     "description": "Allows mocking otherwise untestable PHP functions through the use of namespaces",
+    "license": "MIT",
     "require-dev": {
         "phpunit/phpunit": "*"
     },
