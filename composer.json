@@ -11,6 +11,6 @@
         }
     ],
     "autoload": {
-        "psr-0": {"src", "PHPUnit/Extension/FunctionMocker"}
+        "psr-0": {"PHPUnit_Extension_FunctionMocker": "src"}
     }
 }
