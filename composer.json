@@ -1,0 +1,16 @@
+{
+    "name": "lstrojny/phpunit-function-mocker",
+    "description": "Mock functions with PHPUnit mock objects",
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "authors": [
+        {
+            "name": "Lars Strojny",
+            "email": "lars@strojny.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"src", "PHPUnit/Extension/FunctionMocker"}
+    }
+}
