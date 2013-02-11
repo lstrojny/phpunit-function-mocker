@@ -8,7 +8,7 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
 
     public function tearDown()
     {
-        $this->functionMocker->resetInstance();
+        PHPUnit_Extension_FunctionMocker::tearDown();
     }
 
     public function testBasicMockingFunction()

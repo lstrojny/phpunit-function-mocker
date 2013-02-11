@@ -35,7 +35,7 @@ class PHPUnit_Extension_FunctionMocker
         return new static($testCase, $namespace);
     }
 
-    public function resetInstance()
+    public static function tearDown()
     {
         unset($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
     }
