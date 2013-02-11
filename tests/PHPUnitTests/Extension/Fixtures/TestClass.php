@@ -3,7 +3,7 @@ namespace PHPUnitTests\Extension\Fixtures;
 
 class TestClass
 {
-    public function invokeGlobalFunction()
+    public static function invokeGlobalFunction()
     {
         return strpos('ffoo', 'o');
     }
