@@ -1,5 +1,4 @@
 vendor
 .idea
 atlassian-ide-plugin.xml
-composer.phar
 composer.lock
