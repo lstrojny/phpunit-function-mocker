@@ -27,6 +27,7 @@
         <blacklist>
             <directory suffix=".php">tests/</directory>
             <directory suffix=".php">vendor/</directory>
+            <directory suffix=".php">/usr/share/php</directory>
         </blacklist>
     </filter>
 </phpunit>
