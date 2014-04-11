@@ -2,7 +2,7 @@
 
 Allows mocking otherwise untestable PHP functions through the use of namespaces.
 
-[![Build Status](https://secure.travis-ci.org/lstrojny/phpunit-function-mocker.svg)](http://travis-ci.org/lstrojny/phpunit-function-mocker)
+[![Build Status](https://secure.travis-ci.org/lstrojny/phpunit-function-mocker.svg)](http://travis-ci.org/lstrojny/phpunit-function-mocker) [![Dependency Status](https://www.versioneye.com/user/projects/523ed7fc632bac1b0b00b278/badge.png)](https://www.versioneye.com/user/projects/523ed7fc632bac1b0b00b278)
 
 ```php
 <?php

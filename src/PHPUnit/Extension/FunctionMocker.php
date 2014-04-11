@@ -66,8 +66,26 @@ class PHPUnit_Extension_FunctionMocker
                 continue;
             }
 
-            $code = PHPUnit_Extension_FunctionMocker_CodeGenerator::generateCode($function, $this->namespace);
-            eval($code);
+            if (!extension_loaded('runkit') || !ini_get('runkit.internal_override')) {
+                PHPUnit_Extension_FunctionMocker_CodeGenerator::defineFunction($function, $this->namespace);
+            } elseif (!function_exists('__phpunit_function_mocker_' . $function)) {
+                runkit_function_rename($function, '__phpunit_function_mocker_' . $function);
+                error_log($function);
+                runkit_method_redefine(
+                    $function,
+                    function () use ($function) {
+                        if (!isset($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$this->namespace])) {
+                            return call_user_func_array('__phpunit_function_mocker_' . $function, func_get_args());
+                        }
+
+                        return call_user_func_array(
+                            array($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$this->namespace], $function),
+                            func_get_args()
+                        );
+                    }
+                );
+                var_dump(strlen("foo"));
+            }
 
             static::$mockedFunctions[] = $fqFunction;
         }

@@ -22,4 +22,10 @@ EOS;
 
         return sprintf($template, $namespaceName, $functionName);
     }
+
+    public static function defineFunction($functionName, $namespaceName)
+    {
+        $code = static::generateCode($functionName, $namespaceName);
+        eval($code);
+    }
 }
