@@ -32,6 +32,7 @@ class MyTestCase extends PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /** @runInSeparateProcess */
     public function testIsStringUsesStrlenAndCtypeAlpha()
     {
         $this->php
@@ -52,3 +53,5 @@ class MyTestCase extends PHPUnit_Framework_TestCase
     }
 }
 ```
+### NOTE
+Use `@runInSeparateProcess` annotation to make sure that the mocking is reliably working in PHP >=5.4
