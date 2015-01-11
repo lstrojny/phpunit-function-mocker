@@ -1,5 +1,7 @@
 # PHPUnit function mocker extension
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lstrojny/phpunit-function-mocker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Allows mocking otherwise untestable PHP functions through the use of namespaces.
 
 [![Build Status](https://secure.travis-ci.org/lstrojny/phpunit-function-mocker.svg)](http://travis-ci.org/lstrojny/phpunit-function-mocker) [![Dependency Status](https://www.versioneye.com/user/projects/523ed7fc632bac1b0b00b278/badge.png)](https://www.versioneye.com/user/projects/523ed7fc632bac1b0b00b278) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/lstrojny/phpunit-function-mocker.svg)](http://isitmaintained.com/project/lstrojny/phpunit-function-mocker "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/lstrojny/phpunit-function-mocker.svg)](http://isitmaintained.com/project/lstrojny/phpunit-function-mocker "Percentage of issues still open")
