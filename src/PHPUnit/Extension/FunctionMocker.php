@@ -30,6 +30,17 @@ class PHPUnit_Extension_FunctionMocker
         $this->namespace = trim($namespace, '\\');
     }
 
+    /**
+     * Create a mock for the given namespace to override global namespace functions.
+     *
+     * Example: PHP global namespace function setcookie() needs to be overridden in order to test
+     * if a cookie gets set. When setcookie() is called from inside a class in the namespace
+     * \Foo\Bar the mock setcookie() created here will be used instead to the real function.
+     *
+     * @param PHPUnit_Framework_TestCase $testCase
+     * @param string $namespace
+     * @return PHPUnit_Extension_FunctionMocker
+     */
     public static function start(PHPUnit_Framework_TestCase $testCase, $namespace)
     {
         return new static($testCase, $namespace);
