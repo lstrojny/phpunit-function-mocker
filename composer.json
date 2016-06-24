@@ -3,7 +3,7 @@
     "description": "Allows mocking otherwise untestable PHP functions through the use of namespaces",
     "license": "MIT",
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.6.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

@@ -2,3 +2,4 @@ vendor
 .idea
 atlassian-ide-plugin.xml
 composer.lock
+build/

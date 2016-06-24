@@ -64,12 +64,10 @@ class PHPUnit_Extension_FunctionMocker
 
     public function getMock()
     {
-        $mock = $this->testCase->getMock(
-            'stdClass',
-            $this->functions,
-            array(),
-            'PHPUnit_Extension_FunctionMocker_' . uniqid()
-        );
+        $mock = $this->testCase->getMockBuilder('stdClass')
+            ->setMethods($this->functions)
+            ->setMockClassName('PHPUnit_Extension_FunctionMocker_' . uniqid())
+            ->getMock();
 
         foreach ($this->functions as $function) {
             $fqFunction = $this->namespace . '\\' . $function;
