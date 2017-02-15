@@ -1,14 +1,24 @@
 <?php
-class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCase
+namespace PHPUnitTests\Extension;
+
+use PHPUnit\Extension\FunctionMocker;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class FunctionMockerTest extends TestCase
 {
+    /** @var FunctionMocker */
+    private $functionMocker;
+
     public function setUp()
     {
-        $this->functionMocker = PHPUnit_Extension_FunctionMocker::start($this, 'My\TestNamespace');
+        $this->functionMocker = FunctionMocker::start($this, 'My\TestNamespace');
     }
 
     public function tearDown()
     {
-        PHPUnit_Extension_FunctionMocker::tearDown();
+        FunctionMocker::tearDown();
     }
 
     public function testBasicMockingFunction()
@@ -43,13 +53,13 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('mocked strlen()', My\TestNamespace\strlen('foo'));
-        $this->assertSame(array('foo', 0, 3), My\TestNamespace\substr('foo', 0, 3));
+        $this->assertSame('mocked strlen()', \My\TestNamespace\strlen('foo'));
+        $this->assertSame(array('foo', 0, 3), \My\TestNamespace\substr('foo', 0, 3));
     }
 
     public function testNamespaceLeadingAndTrailingSlash()
     {
-        $this->functionMocker = PHPUnit_Extension_FunctionMocker::start($this, '\My\TestNamespace\\');
+        $this->functionMocker = FunctionMocker::start($this, '\My\TestNamespace\\');
 
         $this->assertMockFunctionNotDefined('My\TestNamespace\strpos');
 
@@ -69,7 +79,7 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('b', My\TestNamespace\strpos('abc', 'b'));
+        $this->assertSame('b', \My\TestNamespace\strpos('abc', 'b'));
     }
 
     public function testFunctionsAreUsedLowercase()
@@ -94,7 +104,7 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('abc', My\TestNamespace\myfunc('abc'));
+        $this->assertSame('abc', \My\TestNamespace\myfunc('abc'));
     }
 
     public function testUseOneFunctionMockerMoreThanOnce()
@@ -125,14 +135,14 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
 
         try {
-            $this->assertSame('abc', My\TestNamespace\strtr('abc'));
+            $this->assertSame('abc', \My\TestNamespace\strtr('abc'));
             $this->fail('Expected exception');
-        } catch (Exception $e) {
+        } catch (AssertionFailedError $e) {
             $this->assertContains('does not match expected value', $e->getMessage());
         }
 
         /** Reset mock objects */
-        $reflected = new ReflectionClass('PHPUnit_Framework_TestCase');
+        $reflected = new ReflectionClass(TestCase::class);
         $mockObjects = $reflected->getProperty('mockObjects');
         $mockObjects->setAccessible(true);
         $mockObjects->setValue($this, array());
@@ -147,7 +157,7 @@ class PHPUnitTests_Extension_FunctionMockerTest extends PHPUnit_Framework_TestCa
         $this->functionMocker->getMock();
         $this->assertMockFunctionDefined('My\TestNamespace\foofunc', 'My\TestNamespace');
 
-        $this->functionMocker = PHPUnit_Extension_FunctionMocker::start($this, 'My\TestNamespace2');
+        $this->functionMocker = FunctionMocker::start($this, 'My\TestNamespace2');
         $this->assertFalse(function_exists('My\TestNamespace2\foofunc'));
         $this->functionMocker
             ->mockFunction('foofunc');

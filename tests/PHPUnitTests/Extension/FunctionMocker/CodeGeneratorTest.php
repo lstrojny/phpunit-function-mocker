@@ -1,9 +1,14 @@
 <?php
-class PHPUnitTests_Extension_FunctionMocker_CodeGeneratorTest extends PHPUnit_Framework_TestCase
+namespace PHPUnitTests\Extension\FunctionMocker;
+
+use PHPUnit\Extension\FunctionMocker\CodeGenerator;
+use PHPUnit\Framework\TestCase;
+
+class CodeGeneratorTest extends TestCase
 {
     public function testRetrieveSimpleFunctionMock()
     {
-        $code = PHPUnit_Extension_FunctionMocker_CodeGenerator::generateCode('strlen', 'Test\Namespace');
+        $code = CodeGenerator::generateCode('strlen', 'Test\Namespace');
 
         $expected = <<<'EOS'
 namespace Test\Namespace

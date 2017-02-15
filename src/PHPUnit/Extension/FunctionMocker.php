@@ -1,30 +1,24 @@
 <?php
+namespace PHPUnit\Extension;
 
-require_once __DIR__ . '/FunctionMocker/CodeGenerator.php';
+use PHPUnit\Extension\FunctionMocker\CodeGenerator;
+use PHPUnit\Framework\TestCase;
 
-class PHPUnit_Extension_FunctionMocker
+class FunctionMocker
 {
-    /**
-     * @var PHPUnit_Framework_TestCase
-     */
+    /** @var TestCase */
     private $testCase;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $namespace;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $functions = array();
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private static $mockedFunctions = array();
 
-    private function __construct(PHPUnit_Framework_TestCase $testCase, $namespace)
+    private function __construct(TestCase $testCase, $namespace)
     {
         $this->testCase = $testCase;
         $this->namespace = trim($namespace, '\\');
@@ -37,11 +31,11 @@ class PHPUnit_Extension_FunctionMocker
      * if a cookie gets set. When setcookie() is called from inside a class in the namespace
      * \Foo\Bar the mock setcookie() created here will be used instead to the real function.
      *
-     * @param PHPUnit_Framework_TestCase $testCase
+     * @param TestCase $testCase
      * @param string $namespace
-     * @return PHPUnit_Extension_FunctionMocker
+     * @return FunctionMocker
      */
-    public static function start(PHPUnit_Framework_TestCase $testCase, $namespace)
+    public static function start(TestCase $testCase, $namespace)
     {
         return new static($testCase, $namespace);
     }
@@ -76,7 +70,7 @@ class PHPUnit_Extension_FunctionMocker
             }
 
             if (!extension_loaded('runkit') || !ini_get('runkit.internal_override')) {
-                PHPUnit_Extension_FunctionMocker_CodeGenerator::defineFunction($function, $this->namespace);
+                CodeGenerator::defineFunction($function, $this->namespace);
             } elseif (!function_exists('__phpunit_function_mocker_' . $function)) {
                 runkit_function_rename($function, '__phpunit_function_mocker_' . $function);
                 error_log($function);

@@ -1,5 +1,7 @@
 <?php
-class PHPUnit_Extension_FunctionMocker_CodeGenerator
+namespace PHPUnit\Extension\FunctionMocker;
+
+class CodeGenerator
 {
     public static function generateCode($functionName, $namespaceName)
     {

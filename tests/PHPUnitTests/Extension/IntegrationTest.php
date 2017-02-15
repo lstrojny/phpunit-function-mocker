@@ -1,13 +1,18 @@
 <?php
+namespace PHPUnitTests\Extension;
+
+use PHPUnit\Extension\FunctionMocker;
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/Fixtures/TestClass.php';
 
-class PHPUnitTests_Extension_IntegrationTest extends PHPUnit_Framework_TestCase
+class IntegrationTest extends TestCase
 {
     private $php;
 
     public function setUp()
     {
-        $this->php = PHPUnit_Extension_FunctionMocker::start($this, 'PHPUnitTests\Extension\Fixtures')
+        $this->php = FunctionMocker::start($this, 'PHPUnitTests\Extension\Fixtures')
             ->mockFunction('strpos')
             ->getMock();
     }
@@ -26,7 +31,7 @@ class PHPUnitTests_Extension_IntegrationTest extends PHPUnit_Framework_TestCase
     public function testMockingGlobalFunctionAndCallingOriginalAgain()
     {
         $this->testMocked();
-        PHPUnit_Extension_FunctionMocker::tearDown();
+        FunctionMocker::tearDown();
         $this->assertSame(2, \PHPUnitTests\Extension\Fixtures\TestClass::invokeGlobalFunction());
     }
 }
