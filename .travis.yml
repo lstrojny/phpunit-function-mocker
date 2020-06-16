@@ -1,14 +1,15 @@
 language: php
 sudo: false
 php:
-  - 7.0
   - 7.1
-  - hhvm
+  - 7.2
+  - 7.3
+  - 7.4
   - nightly
 
 matrix:
   allow_failures:
-    - php: hhvm
+    - php: nightly
 
 before_script:
   - composer install
