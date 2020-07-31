@@ -38,14 +38,15 @@ class FunctionMockerTest extends TestCase
         $this->assertMockFunctionDefined('My\TestNamespace\substr', 'My\TestNamespace');
 
         $mock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('strlen')
-            ->will($this->returnValue('mocked strlen()'))
+            ->will(self::returnValue('mocked strlen()'))
         ;
         $mock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('substr')
-            ->will($this->returnCallback(
+            ->will(
+                self::returnCallback(
                 function() {
                     return func_get_args();
                 }
@@ -53,8 +54,8 @@ class FunctionMockerTest extends TestCase
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('mocked strlen()', \My\TestNamespace\strlen('foo'));
-        $this->assertSame(array('foo', 0, 3), \My\TestNamespace\substr('foo', 0, 3));
+        self::assertSame('mocked strlen()', \My\TestNamespace\strlen('foo'));
+        self::assertSame(array('foo', 0, 3), \My\TestNamespace\substr('foo', 0, 3));
     }
 
     public function testNamespaceLeadingAndTrailingSlash()
@@ -73,13 +74,13 @@ class FunctionMockerTest extends TestCase
         $this->assertMockFunctionDefined('My\TestNamespace\strpos', 'My\TestNamespace');
 
         $mock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('strpos')
-            ->will($this->returnArgument(1))
+            ->will(self::returnArgument(1))
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('b', \My\TestNamespace\strpos('abc', 'b'));
+        self::assertSame('b', \My\TestNamespace\strpos('abc', 'b'));
     }
 
     public function testFunctionsAreUsedLowercase()
@@ -98,13 +99,13 @@ class FunctionMockerTest extends TestCase
         $this->assertMockFunctionDefined('My\TestNamespace\myfunc', 'My\TestNamespace');
 
         $mock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('myfunc')
-            ->will($this->returnArgument(0))
+            ->will(self::returnArgument(0))
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
-        $this->assertSame('abc', \My\TestNamespace\myfunc('abc'));
+        self::assertSame('abc', \My\TestNamespace\myfunc('abc'));
     }
 
     public function testUseOneFunctionMockerMoreThanOnce()
@@ -126,19 +127,19 @@ class FunctionMockerTest extends TestCase
         $this->assertMockFunctionDefined('My\TestNamespace\strtr', 'My\TestNamespace');
 
         $mock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('strtr')
             ->with('abcd')
-            ->will($this->returnArgument(0))
+            ->will(self::returnArgument(0))
         ;
 
         $this->assertMockObjectPresent('My\TestNamespace', $mock);
 
         try {
-            $this->assertSame('abc', \My\TestNamespace\strtr('abc'));
-            $this->fail('Expected exception');
+            self::assertSame('abc', \My\TestNamespace\strtr('abc'));
+            self::fail('Expected exception');
         } catch (AssertionFailedError $e) {
-            $this->assertContains('does not match expected value', $e->getMessage());
+            self::assertContains('does not match expected value', $e->getMessage());
         }
 
         /** Reset mock objects */
@@ -158,34 +159,34 @@ class FunctionMockerTest extends TestCase
         $this->assertMockFunctionDefined('My\TestNamespace\foofunc', 'My\TestNamespace');
 
         $this->functionMocker = FunctionMocker::start($this, 'My\TestNamespace2');
-        $this->assertFalse(function_exists('My\TestNamespace2\foofunc'));
+        self::assertFalse(function_exists('My\TestNamespace2\foofunc'));
         $this->functionMocker
             ->mockFunction('foofunc');
-        $this->assertFalse(function_exists('My\TestNamespace2\foofunc'));
+        self::assertFalse(function_exists('My\TestNamespace2\foofunc'));
         $this->functionMocker->getMock();
         $this->assertMockFunctionDefined('My\TestNamespace2\foofunc', 'My\TestNamespace2');
     }
 
     public function assertMockFunctionNotDefined($function)
     {
-        $this->assertFalse(
+        self::assertFalse(
             function_exists($function),
             sprintf('Function "%s()" was expected to be undefined', $function)
         );
-        $this->assertArrayNotHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
+        self::assertArrayNotHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
     }
 
     public function assertMockFunctionDefined($function, $namespace)
     {
-        $this->assertTrue(function_exists($function));
-        $this->assertArrayHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
-        $this->assertArrayHasKey($namespace, $GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
+        self::assertTrue(function_exists($function));
+        self::assertArrayHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
+        self::assertArrayHasKey($namespace, $GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
     }
 
     public function assertMockObjectPresent($namespace, $mock)
     {
-        $this->assertArrayHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
-        $this->assertArrayHasKey($namespace, $GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
-        $this->assertSame($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$namespace], $mock);
+        self::assertArrayHasKey('__PHPUNIT_EXTENSION_FUNCTIONMOCKER', $GLOBALS);
+        self::assertArrayHasKey($namespace, $GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
+        self::assertSame($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$namespace], $mock);
     }
 }

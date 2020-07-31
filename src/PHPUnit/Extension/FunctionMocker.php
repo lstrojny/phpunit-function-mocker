@@ -2,7 +2,10 @@
 namespace PHPUnit\Extension;
 
 use PHPUnit\Extension\FunctionMocker\CodeGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use function bin2hex;
+use function random_bytes;
 
 class FunctionMocker
 {
@@ -14,6 +17,9 @@ class FunctionMocker
 
     /** @var array */
     private $functions = array();
+
+    /** @var array */
+    private $constants = [];
 
     /** @var array */
     private static $mockedFunctions = array();
@@ -30,22 +36,18 @@ class FunctionMocker
      * Example: PHP global namespace function setcookie() needs to be overridden in order to test
      * if a cookie gets set. When setcookie() is called from inside a class in the namespace
      * \Foo\Bar the mock setcookie() created here will be used instead to the real function.
-     *
-     * @param TestCase $testCase
-     * @param string $namespace
-     * @return FunctionMocker
      */
-    public static function start(TestCase $testCase, $namespace)
+    public static function start(TestCase $testCase, string $namespace): self
     {
         return new static($testCase, $namespace);
     }
 
-    public static function tearDown()
+    public static function tearDown(): void
     {
         unset($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER']);
     }
 
-    public function mockFunction($function)
+    public function mockFunction(string $function): self
     {
         $function = trim(strtolower($function));
 
@@ -56,12 +58,23 @@ class FunctionMocker
         return $this;
     }
 
-    public function getMock()
+    public function mockConstant(string $constant, $value): self
+    {
+        $this->constants[trim($constant)] = $value;
+
+        return $this;
+    }
+
+    public function getMock(): MockObject
     {
         $mock = $this->testCase->getMockBuilder('stdClass')
             ->setMethods($this->functions)
-            ->setMockClassName('PHPUnit_Extension_FunctionMocker_' . uniqid())
+            ->setMockClassName('PHPUnit_Extension_FunctionMocker_' . bin2hex(random_bytes(16)))
             ->getMock();
+
+        foreach ($this->constants as $constant => $value) {
+            CodeGenerator::defineConstant($this->namespace, $constant, $value);
+        }
 
         foreach ($this->functions as $function) {
             $fqFunction = $this->namespace . '\\' . $function;
@@ -69,27 +82,7 @@ class FunctionMocker
                 continue;
             }
 
-            if (!extension_loaded('runkit') || !ini_get('runkit.internal_override')) {
-                CodeGenerator::defineFunction($function, $this->namespace);
-            } elseif (!function_exists('__phpunit_function_mocker_' . $function)) {
-                runkit_function_rename($function, '__phpunit_function_mocker_' . $function);
-                error_log($function);
-                runkit_method_redefine(
-                    $function,
-                    function () use ($function) {
-                        if (!isset($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$this->namespace])) {
-                            return call_user_func_array('__phpunit_function_mocker_' . $function, func_get_args());
-                        }
-
-                        return call_user_func_array(
-                            array($GLOBALS['__PHPUNIT_EXTENSION_FUNCTIONMOCKER'][$this->namespace], $function),
-                            func_get_args()
-                        );
-                    }
-                );
-                var_dump(strlen("foo"));
-            }
-
+            CodeGenerator::defineFunction($this->namespace, $function);
             static::$mockedFunctions[] = $fqFunction;
         }
 

@@ -7,4 +7,9 @@ class TestClass
     {
         return strpos('ffoo', 'o');
     }
+
+    public static function getGlobalConstant()
+    {
+        return CNT;
+    }
 }
