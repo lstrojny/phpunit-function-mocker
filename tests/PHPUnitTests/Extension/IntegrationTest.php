@@ -3,6 +3,7 @@ namespace PHPUnitTests\Extension;
 
 use PHPUnit\Extension\FunctionMocker;
 use PHPUnit\Framework\TestCase;
+use PHPUnitTests\Extension\Fixtures\TestClass;
 
 require_once __DIR__ . '/Fixtures/TestClass.php';
 
@@ -14,24 +15,30 @@ class IntegrationTest extends TestCase
     {
         $this->php = FunctionMocker::start($this, 'PHPUnitTests\Extension\Fixtures')
             ->mockFunction('strpos')
+            ->mockConstant('CNT', 'val')
             ->getMock();
     }
 
-    public function testMocked()
+    public function testMockFunction()
     {
         $this->php
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('strpos')
             ->with('ffoo', 'o')
-            ->will($this->returnValue('mocked'));
+            ->will(self::returnValue('mocked'));
 
-        $this->assertSame('mocked', \PHPUnitTests\Extension\Fixtures\TestClass::invokeGlobalFunction());
+        self::assertSame('mocked', TestClass::invokeGlobalFunction());
     }
 
     public function testMockingGlobalFunctionAndCallingOriginalAgain()
     {
-        $this->testMocked();
+        $this->testMockFunction();
         FunctionMocker::tearDown();
-        $this->assertSame(2, \PHPUnitTests\Extension\Fixtures\TestClass::invokeGlobalFunction());
+        self::assertSame(2, TestClass::invokeGlobalFunction());
+    }
+
+    public function testMockConstant()
+    {
+        self::assertSame('val', TestClass::getGlobalConstant());
     }
 }
