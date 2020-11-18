@@ -11,12 +11,12 @@ class FunctionMockerTest extends TestCase
     /** @var FunctionMocker */
     private $functionMocker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->functionMocker = FunctionMocker::start($this, 'My\TestNamespace');
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         FunctionMocker::tearDown();
     }
