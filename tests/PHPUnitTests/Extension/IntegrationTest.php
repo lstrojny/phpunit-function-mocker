@@ -10,7 +10,7 @@ class IntegrationTest extends TestCase
 {
     private $php;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->php = FunctionMocker::start($this, 'PHPUnitTests\Extension\Fixtures')
             ->mockFunction('strpos')
